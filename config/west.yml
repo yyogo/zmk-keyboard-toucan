@@ -10,13 +10,15 @@ manifest:
       url-base: https://github.com/caksoylar
     - name: geeksville
       url-base: https://github.com/geeksville
+    - name: yyogo
+      url-base: https://github.com/yyogo
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
     - name: cirque-input-module
-      remote: geeksville
-      revision: toucan
+      remote: yyogo
+      revision: toucan-disable-filter
     - name: zmk-rgbled-widget
       remote: caksoylar
       revision: v0.3
