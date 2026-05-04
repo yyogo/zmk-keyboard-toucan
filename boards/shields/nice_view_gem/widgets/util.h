@@ -25,6 +25,8 @@ struct status_state {
     bool active_profile_bonded;
     uint8_t layer_index;
     const char *layer_label;
+    int wpm;
+    bool caps_lock;
 #else
     bool connected;
 #endif

@@ -21,3 +21,8 @@ bool is_sleep_screen_active(void);
  * Called by the activity state change handler.
  */
 void set_sleep_screen_active(bool active);
+
+/**
+ * Shared 96x96 1-bit beekeeb icon, also used by the boot logo widget.
+ */
+extern const lv_img_dsc_t sleep_icon;
