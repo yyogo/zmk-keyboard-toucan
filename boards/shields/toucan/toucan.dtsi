@@ -108,6 +108,14 @@
         status = "disabled";
         device = <&glidepoint_split>;
         input-processors = <&zip_xy_scaler 250 100>;
+        precise {
+            layers = <4>;
+            input-processors = <&zip_xy_scaler 100 100>;
+        };
+        fast {
+            layers = <5>;
+            input-processors = <&zip_xy_scaler 500 100>;
+        };
         scroller {
             layers = <1 2>;
             input-processors = <

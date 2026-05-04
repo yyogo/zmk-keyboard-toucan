@@ -3,10 +3,12 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
-#define BASE 0
-#define NAV  1
-#define SYM  2
-#define ADJ  3
+#define BASE    0
+#define NAV     1
+#define SYM     2
+#define ADJ     3
+#define PRECISE 4
+#define FAST    5
 
 / {
     conditional_layers {
@@ -34,7 +36,7 @@
             display-name = "NAV";
             bindings = <
                 &kp TAB     &kp N1          &kp N2       &kp N3       &kp N4       &kp N5         &kp N6    &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
-                &bt BT_CLR  &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT  &kp DOWN &kp UP &kp RIGHT &trans &trans
+                &bt BT_CLR  &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT  &kp DOWN &kp UP &kp RIGHT &tog PRECISE &tog FAST
                 &kp LCTRL   &studio_unlock  &trans       &trans       &trans       &kp LALT       &kp RSHFT &trans   &trans &trans    &trans &trans
                                                 &mo 1        &trans       &kp SPACE      &kp RET  &trans   &kp RALT
             >;
@@ -59,12 +61,24 @@
                                    &mo NAV &kp LGUI &kp SPACE   &kp RET &mo 2 &kp RALT
             >;
         };
-        extra_1 {
-                status = "reserved";
+        precise {
+            display-name = "PREC";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                                     &trans &trans &trans   &trans &trans &trans
+            >;
         };
 
-        extra_2 {
-                status = "reserved";
+        fast {
+            display-name = "FAST";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                                     &trans &trans &trans   &trans &trans &trans
+            >;
         };
 
         extra_3 {

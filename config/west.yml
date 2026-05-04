@@ -18,7 +18,7 @@ manifest:
       import: app/west.yml
     - name: cirque-input-module
       remote: yyogo
-      revision: toucan-disable-filter
+      revision: toucan-tuning
     - name: zmk-rgbled-widget
       remote: caksoylar
       revision: v0.3
