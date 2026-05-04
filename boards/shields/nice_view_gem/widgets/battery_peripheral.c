@@ -2,33 +2,46 @@
 #include "battery_peripheral.h"
 #include "../assets/custom_fonts.h"
 
-LV_IMG_DECLARE(bolt);
-LV_IMG_DECLARE(r_battery_100);
-LV_IMG_DECLARE(r_battery_90);
-LV_IMG_DECLARE(r_battery_75);
-LV_IMG_DECLARE(r_battery_50);
-LV_IMG_DECLARE(r_battery_25);
-LV_IMG_DECLARE(r_battery_10);
+// Right-side battery indicator drawn from primitives so the "R" label can
+// sit on the right of the bar (instead of baked into the left of the
+// pre-rendered bitmap used previously).
 
+#define BATT_X       80
+#define BATT_Y       12
+#define BATT_BODY_W  42
+#define BATT_BODY_H  12
+#define BATT_NUB_W   2
+#define BATT_NUB_H   4
+#define BATT_LABEL_X (BATT_X + BATT_BODY_W + BATT_NUB_W + 3)
+#define BATT_LABEL_Y (BATT_Y + 1)
 
 static void draw_level_peripheral(lv_obj_t *canvas, const struct status_state *state) {
-    lv_draw_img_dsc_t img_dsc_r;
-    lv_draw_img_dsc_init(&img_dsc_r);
+    lv_draw_rect_dsc_t outline;
+    lv_draw_rect_dsc_init(&outline);
+    outline.bg_color = LVGL_BACKGROUND;
+    outline.border_color = LVGL_FOREGROUND;
+    outline.border_width = 1;
+    lv_canvas_draw_rect(canvas, BATT_X, BATT_Y, BATT_BODY_W, BATT_BODY_H, &outline);
+
+    lv_draw_rect_dsc_t fill;
+    init_rect_dsc(&fill, LVGL_FOREGROUND);
+    lv_canvas_draw_rect(canvas, BATT_X + BATT_BODY_W,
+                        BATT_Y + (BATT_BODY_H - BATT_NUB_H) / 2,
+                        BATT_NUB_W, BATT_NUB_H, &fill);
 
     uint8_t level = state->battery_p;
-    if (level > 90) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_100, &img_dsc_r);
-    } else if (level > 75) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_90, &img_dsc_r);
-    } else if (level > 50) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_75, &img_dsc_r);
-    } else if (level > 25) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_50, &img_dsc_r);
-    } else if (level > 10) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_25, &img_dsc_r);
-    } else if (level > 1) {
-        lv_canvas_draw_img(canvas, 80, 10, &r_battery_10, &img_dsc_r);
+    if (level > 1) {
+        int inner_w = BATT_BODY_W - 4;
+        int inner_h = BATT_BODY_H - 4;
+        int fill_w = (inner_w * level + 50) / 100;
+        if (fill_w > 0) {
+            lv_canvas_draw_rect(canvas, BATT_X + 2, BATT_Y + 2, fill_w, inner_h, &fill);
+        }
     }
+
+    lv_draw_label_dsc_t label_dsc;
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
+    lv_canvas_draw_text(canvas, BATT_LABEL_X, BATT_LABEL_Y, 12, &label_dsc, "R");
 }
 
 void draw_battery_peripheral_status(lv_obj_t *canvas, const struct status_state *state) {
