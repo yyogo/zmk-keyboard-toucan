@@ -129,27 +129,28 @@ static const struct row_span tail_rows[] = {
 
 // Happy frame B left flap (5 rows) starting at by+1.
 static const struct row_span left_flap_rows[] = {
-    { -3, 1 },
-    { -4, 4 },
-    { -5, 7 },
+    { -7, 3 },
+    { -6, 5 },
+    { -6, 8 },
     { -5, 7 },
     { -4, 6 },
+    { -2, 4 },
 };
 
 // Happy frame B right flap (5 rows) starting at by+0.
 static const struct row_span right_flap_rows[] = {
-    {  9, 1 },
-    {  7, 4 },
-    {  5, 7 },
-    {  4, 8 },
-    {  6, 5 },
+    {  8, 3 },
+    {  7, 3 },
+    {  6, 3 },
+    // {  , 6 },
+    // {  6, 4 },
 };
 
 // ---- Render -----------------------------------------------------------
 
 void mascot_render(lv_obj_t *canvas, int x, int y,
                    enum mascot_state state, int frame,
-                   bool sleeping, bool reacting, bool flip_x) {
+                   bool sleeping, bool reacting, bool flip_x, bool moving) {
     int body_y_offset = (state == MASCOT_SAD) ? 1 : 0;
     int feet_extra = (state == MASCOT_HAPPY) ? 1 : 0;
     int squash = (frame == 1 && !sleeping) ? 1 : 0;
@@ -177,11 +178,11 @@ void mascot_render(lv_obj_t *canvas, int x, int y,
     int by = y + 12 + body_y_offset;
     int bh = 10 - squash;
     if (squash) {
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 4; i++) {
             mr_rect(&ctx, bx + body_rows[i].x, by + i,
                     body_rows[i].w, 1, &fill);
         }
-        for (int i = 6; i < 8; i++) {
+        for (int i = 5; i < 8; i++) {
             mr_rect(&ctx, bx + body_rows[i + 1].x, by + i,
                     body_rows[i + 1].w, 1, &fill);
         }
@@ -201,9 +202,9 @@ void mascot_render(lv_obj_t *canvas, int x, int y,
     // ----- Wing(s) -----
     if (!sleeping) {
         if (state == MASCOT_HAPPY && frame == 1) {
-            draw_spans(&ctx, bx, by + 1, left_flap_rows,
+            draw_spans(&ctx, bx + 1, by - 2, left_flap_rows,
                        (int)(sizeof(left_flap_rows) / sizeof(left_flap_rows[0])), &fill);
-            draw_spans(&ctx, bx, by + 0, right_flap_rows,
+            draw_spans(&ctx, bx + 3, by - 1, right_flap_rows,
                        (int)(sizeof(right_flap_rows) / sizeof(right_flap_rows[0])), &fill);
         }
     }
@@ -224,12 +225,21 @@ void mascot_render(lv_obj_t *canvas, int x, int y,
     // ----- Feet -----
     if (state != MASCOT_SLEEP) {
         int feet_y = y + 19;
-        int feet_h = 4 + feet_extra;
+        int feet_h = 3 + feet_extra;
         int left_x = bx + 2;
         int right_x = bx + 6;
-        mr_rect(&ctx, left_x,  feet_y, 2, feet_h, &fill);
-        mr_rect(&ctx, right_x, feet_y, 2, feet_h, &fill);
-        mr_rect(&ctx, left_x,  feet_y + feet_h - 1, 4, 1, &fill);
-        mr_rect(&ctx, right_x, feet_y + feet_h - 1, 4, 1, &fill);
+        // Walking shuffle: when the bird is moving, alternate which foot is
+        // "lifted" (1 px shorter) between breathing frames. Each foot's toe
+        // pad rides at the bottom of its leg, so the lifted foot's pad
+        // rises 1 px and the bird visibly steps. When stationary, both feet
+        // stay grounded.
+        int left_lift  = (moving && frame == 1) ? 1 : 0;
+        int right_lift = (moving && frame == 0) ? 1 : 0;
+        int left_h  = feet_h - left_lift;
+        int right_h = feet_h - right_lift;
+        mr_rect(&ctx, left_x,  feet_y, 2, left_h,  &fill);
+        mr_rect(&ctx, right_x, feet_y, 2, right_h, &fill);
+        mr_rect(&ctx, left_x - 1,  feet_y + left_h,  4, 1, &fill);
+        mr_rect(&ctx, right_x - 1, feet_y + right_h, 6, 1, &fill);
     }
 }

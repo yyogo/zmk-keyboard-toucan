@@ -35,8 +35,8 @@ extern void zmk_widget_screen_force_redraw(void);
 #define HIGH_WPM_THRESHOLD       80
 #define HIGH_WPM_HOLD_MS         5000
 
-#define WALK_STEP_MS  1000
-#define WALK_RANGE    50
+#define WALK_STEP_MS    1000
+#define WALK_RANGE      50
 
 static int8_t s_mood = 0;
 static bool s_sleeping = false;
@@ -46,6 +46,10 @@ static int64_t s_high_wpm_started_ms = 0;
 static int8_t s_walk_offset = 0;
 static int8_t s_walk_dir = 1;
 static int64_t s_last_step_ms = 0;
+// Set true in the keypress callback when a walking step actually happens,
+// cleared after the next animation frame is rendered. Drives the foot
+// shuffle in the renderer.
+static bool s_walking = false;
 
 static lv_timer_t *s_anim_timer = NULL;
 static lv_timer_t *s_decay_timer = NULL;
@@ -84,6 +88,10 @@ static void anim_timer_cb(lv_timer_t *t) {
     }
     s_frame_idx ^= 1;
     zmk_widget_screen_force_redraw();
+    // s_walking was set to true by mascot_position_cb when a step happened
+    // since the last frame. Clear it now so the next frame is "stationary"
+    // unless another step lands in the meantime.
+    s_walking = false;
 }
 
 static void decay_timer_cb(lv_timer_t *t) {
@@ -121,6 +129,7 @@ static void mascot_position_cb(struct mascot_position_event ev) {
             s_walk_dir = 1;
         }
         s_last_step_ms = now;
+        s_walking = true;
     }
 
     zmk_widget_screen_force_redraw();
@@ -181,6 +190,7 @@ static void mascot_activity_cb(struct mascot_activity_event ev) {
         // facing right.
         s_walk_offset = 0;
         s_walk_dir = 1;
+        s_walking = false;
     }
     zmk_widget_screen_force_redraw();
 }
@@ -214,7 +224,7 @@ void draw_mascot(lv_obj_t *canvas, const struct status_state *state) {
 
     int draw_x = MASCOT_X + s_walk_offset;
     bool flip = (s_walk_dir < 0);
-    mascot_render(canvas, draw_x, MASCOT_Y, ms, s_frame_idx, s_sleeping, reacting, flip);
+    mascot_render(canvas, draw_x, MASCOT_Y, ms, s_frame_idx, s_sleeping, reacting, flip, s_walking);
 
     // Sleep "z" overlay (kept here because it needs the font asset, which
     // mascot_render.c intentionally avoids depending on).

@@ -17,6 +17,8 @@ enum mascot_state {
 //   reacting - if true, eye is closed (wink reaction)
 //   flip_x   - if true, mirrors horizontally around the body centerline
 //              (bird faces left); used when walking in the -x direction.
+//   moving   - if true, feet shuffle (alternate which is lifted) per frame.
+//              When false, both feet stay grounded.
 void mascot_render(lv_obj_t *canvas, int x, int y,
                    enum mascot_state state, int frame,
-                   bool sleeping, bool reacting, bool flip_x);
+                   bool sleeping, bool reacting, bool flip_x, bool moving);
