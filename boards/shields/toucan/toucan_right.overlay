@@ -66,6 +66,11 @@
         x-invert;
         disable-filter;
         smoothing-strength = <4>;
+        // Absolute mode + driver-computed relative deltas. Chip reports
+        // raw absolute positions (~1920 wide, higher precision than the
+        // 8-bit relative-mode deltas), driver subtracts and divides.
+        // Divisor tunes effective sensitivity vs the userspace scaler.
+        abs-rel-divisor = <8>;
 
         // Optional: turning this on enables very aggressive power saving, after 5 seconds with no touches
         // the trackpad will go to sleep.  It wakes up on touch, but there is a ~300ms delay.  Most users will find
