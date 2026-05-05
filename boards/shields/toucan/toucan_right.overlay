@@ -81,7 +81,8 @@
 
 &glidepoint_split {
     device = <&glidepoint>;
-
-    // Optional
-    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // The chip's FEED_CFG1.INV_Y bit only affects relative-mode reporting;
+    // in absolute (abs-rel-divisor) mode the chip outputs raw positions
+    // and we have to invert Y in software here.
+    input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
 };
