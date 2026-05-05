@@ -27,7 +27,8 @@ extern void zmk_widget_screen_force_redraw(void);
 #define MOOD_MAX   100
 #define MOOD_MIN  -100
 
-#define ANIM_PERIOD_MS    250
+#define ANIM_PERIOD_MS    1000
+#define ANIM_IDLE_FREEZE_MS 5000
 #define DECAY_PERIOD_MS   60000
 #define REACTION_HOLD_MS  200
 
@@ -70,7 +71,17 @@ static bool is_reacting(void) {
 // ----- LVGL timers (run in display thread) -----------------------------
 
 static void anim_timer_cb(lv_timer_t *t) {
-    if (s_sleeping) return;
+    if (s_sleeping) {
+        return;
+    }
+    int64_t now = k_uptime_get();
+    if (s_last_keypress_ms == 0 ||
+        now - s_last_keypress_ms > ANIM_IDLE_FREEZE_MS) {
+        // No recent typing -- freeze the breathing/wing-flap animation to
+        // avoid waking the display SPI bus pointlessly. Resumes on the
+        // next keypress (which schedules its own redraw).
+        return;
+    }
     s_frame_idx ^= 1;
     zmk_widget_screen_force_redraw();
 }
