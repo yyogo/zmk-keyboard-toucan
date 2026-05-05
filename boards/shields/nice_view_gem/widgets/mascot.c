@@ -36,7 +36,7 @@ extern void zmk_widget_screen_force_redraw(void);
 #define HIGH_WPM_HOLD_MS         5000
 
 #define WALK_STEP_MS  1000
-#define WALK_RANGE    2
+#define WALK_RANGE    50
 
 static int8_t s_mood = 0;
 static bool s_sleeping = false;
@@ -177,8 +177,10 @@ static void mascot_activity_cb(struct mascot_activity_event ev) {
     }
     s_sleeping = ev.sleeping;
     if (s_sleeping) {
-        // Snap back to center so wake-up is consistent.
+        // Snap back to center so wake-up is consistent and the bird wakes
+        // facing right.
         s_walk_offset = 0;
+        s_walk_dir = 1;
     }
     zmk_widget_screen_force_redraw();
 }
@@ -211,7 +213,8 @@ void draw_mascot(lv_obj_t *canvas, const struct status_state *state) {
     bool reacting = !s_sleeping && is_reacting();
 
     int draw_x = MASCOT_X + s_walk_offset;
-    mascot_render(canvas, draw_x, MASCOT_Y, ms, s_frame_idx, s_sleeping, reacting);
+    bool flip = (s_walk_dir < 0);
+    mascot_render(canvas, draw_x, MASCOT_Y, ms, s_frame_idx, s_sleeping, reacting, flip);
 
     // Sleep "z" overlay (kept here because it needs the font asset, which
     // mascot_render.c intentionally avoids depending on).
