@@ -17,7 +17,7 @@ static void draw_layer_indicator(lv_obj_t *canvas, const struct status_state *st
         return;
     }
 
-    const int rect_w = 8;
+    const int rect_w = 16;
     const int rect_h = 5;
     const int gap = 2;
     const int total_w = n_layers * rect_w + (n_layers - 1) * gap;

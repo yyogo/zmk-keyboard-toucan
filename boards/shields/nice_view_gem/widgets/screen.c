@@ -29,6 +29,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "boot_logo.h"
 #include "caps.h"
 #include "layer.h"
+#include "mascot.h"
 #include "output.h"
 #include "profile.h"
 #include "screen.h"
@@ -67,6 +68,7 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     draw_battery_peripheral_status(canvas, state);
     draw_wpm_status(canvas, state);
     draw_caps_status(canvas, state);
+    draw_mascot(canvas, state);
 }
 
 /**
@@ -338,6 +340,7 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget_output_status_init();
     widget_wpm_status_init();
     widget_caps_status_init();
+    mascot_widget_init();
 
     start_boot_logo();
 
