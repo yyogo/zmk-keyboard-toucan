@@ -66,11 +66,6 @@
         x-invert;
         disable-filter;
         smoothing-strength = <4>;
-        // Absolute mode + driver-computed relative deltas. Chip reports
-        // raw absolute positions (~1920 wide, higher precision than the
-        // 8-bit relative-mode deltas), driver subtracts and divides.
-        // Divisor tunes effective sensitivity vs the userspace scaler.
-        abs-rel-divisor = <8>;
 
         // Optional: turning this on enables very aggressive power saving, after 5 seconds with no touches
         // the trackpad will go to sleep.  It wakes up on touch, but there is a ~300ms delay.  Most users will find
@@ -81,8 +76,7 @@
 
 &glidepoint_split {
     device = <&glidepoint>;
-    // The chip's FEED_CFG1.INV_Y bit only affects relative-mode reporting;
-    // in absolute (abs-rel-divisor) mode the chip outputs raw positions
-    // and we have to invert Y in software here.
-    input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+
+    // Optional
+    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
 };
