@@ -69,7 +69,7 @@
         // Absolute-mode reporting (chip emits raw positions, driver
         // computes deltas / divisor). Different signal path; smoother
         // at fast speeds than the chip's relative-mode 8-bit deltas.
-        abs-rel-divisor = <16>;
+        abs-rel-divisor = <4>;
         // Bypass the chip's ~200 ms tap-confirmation timer.
         tap-fast;
 
