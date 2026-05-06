@@ -64,6 +64,9 @@
         dr-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH)>;
         sensitivity = "2x";
         x-invert;
+        // Cirque actively recommends keeping the chip's hardware filter
+        // enabled (and our software smoothing sits on top of it),
+        // but it seems to introduce too much latency.
         disable-filter;
         smoothing-strength = <4>;
         // Absolute-mode reporting (chip emits raw positions, driver
