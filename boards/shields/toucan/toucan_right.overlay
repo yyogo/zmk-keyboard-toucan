@@ -66,6 +66,12 @@
         x-invert;
         disable-filter;
         smoothing-strength = <4>;
+        // Absolute-mode reporting (chip emits raw positions, driver
+        // computes deltas / divisor). Different signal path; smoother
+        // at fast speeds than the chip's relative-mode 8-bit deltas.
+        abs-rel-divisor = <16>;
+        // Bypass the chip's ~200 ms tap-confirmation timer.
+        tap-fast;
 
         // Optional: turning this on enables very aggressive power saving, after 5 seconds with no touches
         // the trackpad will go to sleep.  It wakes up on touch, but there is a ~300ms delay.  Most users will find
@@ -76,7 +82,8 @@
 
 &glidepoint_split {
     device = <&glidepoint>;
-
-    // Optional
-    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // Chip's FEED_CFG1.INV_Y bit only flips relative-mode reporting; in
+    // abs-rel mode the raw absolute Y comes out opposite, so flip it
+    // here in software for every event leaving the chip.
+    input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
 };
