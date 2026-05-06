@@ -3,7 +3,6 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
   zephyr_library_sources(custom_status_screen.c)
   zephyr_library_sources(assets/images.c)
   zephyr_library_sources(widgets/battery.c)
-  zephyr_library_sources(widgets/battery_peripheral.c)
   zephyr_library_sources(widgets/output.c)
   zephyr_library_sources(widgets/util.c)
   

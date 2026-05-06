@@ -25,7 +25,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/split/central.h>
 
 #include "battery.h"
-#include "battery_peripheral.h"
 #include "boot_logo.h"
 #include "caps.h"
 #include "layer.h"
@@ -64,8 +63,8 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     draw_output_status(canvas, state);
     draw_layer_status(canvas, state);
     draw_profile_status(canvas, state);
-    draw_battery_status(canvas, state);
-    draw_battery_peripheral_status(canvas, state);
+    draw_battery_left(canvas, state);
+    draw_battery_right(canvas, state);
     draw_wpm_status(canvas, state);
     draw_caps_status(canvas, state);
     draw_mascot(canvas, state);
