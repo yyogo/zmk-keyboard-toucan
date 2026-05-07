@@ -36,8 +36,8 @@
             display-name = "NAV";
             bindings = <
                 &kp TAB     &kp N1          &kp N2       &kp N3       &kp N4       &kp N5         &kp N6    &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
-                &trans      &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT  &kp DOWN &kp UP &kp RIGHT &tog PRECISE &tog FAST
-                &kp LCTRL   &studio_unlock  &trans       &trans       &trans       &kp LALT       &kp RSHFT &trans   &trans &trans    &trans &trans
+                &trans      &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &to PRECISE &trans
+                &kp LCTRL   &studio_unlock  &trans       &kp INS      &trans       &kp LALT       &kp RSHFT &kp HOME  &kp PG_DN &kp PG_UP &kp END     &kp DEL
                                                 &mo 1        &trans       &kp SPACE      &kp RET  &trans   &kp RALT
             >;
         };
@@ -55,18 +55,18 @@
         adj {
             display-name = "ADJ";
             bindings = <
-                &mo TAB   &trans &kp F7 &kp F8 &kp F9 &kp F12   &kp C_VOL_DN &kp C_MUTE  &kp C_VOL_UP &trans &trans &kp BSPC
-                &bt BT_CLR &trans &kp F4 &kp F5 &kp F6 &kp F11   &trans       &trans      &trans       &trans &trans &trans
-                &kp LCTRL &trans &kp F1 &kp F2 &kp F3 &kp F10   &trans       &trans      &trans       &trans &trans &trans
+                &kp TAB   &trans &kp F7 &kp F8 &kp F9 &kp F12   &kp C_VOL_DN &kp C_MUTE  &kp C_VOL_UP &trans &trans &kp BSPC
+                &bt BT_CLR &trans &kp F4 &kp F5 &kp F6 &kp F11   &kp C_PREV   &kp C_PP    &kp C_NEXT   &trans &trans &kp PSCRN
+                &kp LCTRL &trans &kp F1 &kp F2 &kp F3 &kp F10   &kp C_BRI_DN &trans      &kp C_BRI_UP &trans &trans &kp CAPS
                                    &mo NAV &kp LGUI &kp SPACE   &kp RET &mo 2 &kp RALT
             >;
         };
         precise {
             display-name = "PREC";
             bindings = <
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans   &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &to FAST &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans   &trans
                                      &trans &trans &trans   &trans &trans &trans
             >;
         };
@@ -74,9 +74,9 @@
         fast {
             display-name = "FAST";
             bindings = <
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans   &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &to BASE &trans
+                &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans   &trans
                                      &trans &trans &trans   &trans &trans &trans
             >;
         };
