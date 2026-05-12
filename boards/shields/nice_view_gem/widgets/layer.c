@@ -37,9 +37,9 @@ static void draw_layer_indicator(lv_obj_t *canvas, const struct status_state *st
     for (int i = 0; i < n_layers; i++) {
         int x = x_start + i * (rect_w + gap);
         if (i == state->layer_index) {
-            lv_canvas_draw_rect(canvas, x, y, rect_w, rect_h, &filled);
+            canvas_draw_rect(canvas, x, y, rect_w, rect_h, &filled);
         } else {
-            lv_canvas_draw_rect(canvas, x, y, rect_w, rect_h, &outline);
+            canvas_draw_rect(canvas, x, y, rect_w, rect_h, &outline);
         }
     }
 }
@@ -58,6 +58,6 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
         layer_name = fallback_layer_name;
     }
 
-    lv_canvas_draw_text(canvas, 0, LAYER_STATUS_Y, SCREEN_WIDTH, &label_dsc, layer_name);
+    canvas_draw_text(canvas, 0, LAYER_STATUS_Y, SCREEN_WIDTH, &label_dsc, layer_name);
     draw_layer_indicator(canvas, state);
 }

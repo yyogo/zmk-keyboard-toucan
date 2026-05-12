@@ -22,7 +22,7 @@
 static void draw_label(lv_obj_t *canvas, int x, const char *label) {
     lv_draw_label_dsc_t dsc;
     init_label_dsc(&dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, x, BATT_Y + 1, 12, &dsc, label);
+    canvas_draw_text(canvas, x, BATT_Y + 1, 12, &dsc, label);
 }
 
 static void draw_outline(lv_obj_t *canvas, int x) {
@@ -31,11 +31,11 @@ static void draw_outline(lv_obj_t *canvas, int x) {
     outline.bg_color = LVGL_BACKGROUND;
     outline.border_color = LVGL_FOREGROUND;
     outline.border_width = 1;
-    lv_canvas_draw_rect(canvas, x, BATT_Y, BATT_BODY_W, BATT_BODY_H, &outline);
+    canvas_draw_rect(canvas, x, BATT_Y, BATT_BODY_W, BATT_BODY_H, &outline);
 
     lv_draw_rect_dsc_t fill;
     init_rect_dsc(&fill, LVGL_FOREGROUND);
-    lv_canvas_draw_rect(canvas, x + BATT_BODY_W,
+    canvas_draw_rect(canvas, x + BATT_BODY_W,
                         BATT_Y + (BATT_BODY_H - BATT_NUB_H) / 2,
                         BATT_NUB_W, BATT_NUB_H, &fill);
 }
@@ -49,7 +49,7 @@ static void draw_fill(lv_obj_t *canvas, int x, uint8_t level) {
     int inner_h = BATT_BODY_H - 4;
     int fill_w = (inner_w * level + BATT_FULL_LEVEL / 2) / BATT_FULL_LEVEL;
     if (fill_w > 0) {
-        lv_canvas_draw_rect(canvas, x + 2, BATT_Y + 2, fill_w, inner_h, &fill);
+        canvas_draw_rect(canvas, x + 2, BATT_Y + 2, fill_w, inner_h, &fill);
     }
 }
 
@@ -64,7 +64,7 @@ static void draw_offline(lv_obj_t *canvas, int x) {
     int x0 = x + (BATT_BODY_W - dash_w * 3 - dash_gap * 2) / 2;
     int y0 = BATT_Y + (BATT_BODY_H - dash_h) / 2;
     for (int i = 0; i < 3; i++) {
-        lv_canvas_draw_rect(canvas, x0 + i * (dash_w + dash_gap), y0, dash_w, dash_h, &dash);
+        canvas_draw_rect(canvas, x0 + i * (dash_w + dash_gap), y0, dash_w, dash_h, &dash);
     }
 }
 

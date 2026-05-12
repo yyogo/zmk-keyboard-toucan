@@ -41,9 +41,9 @@ void draw_boot_logo(lv_obj_t *canvas) {
         y = LOGO_FINAL_Y;
     }
 
-    lv_draw_img_dsc_t img_dsc;
-    lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, LOGO_FINAL_X, y, &sleep_icon, &img_dsc);
+    lv_draw_image_dsc_t img_dsc;
+    lv_draw_image_dsc_init(&img_dsc);
+    canvas_draw_img(canvas, LOGO_FINAL_X, y, &sleep_icon, &img_dsc);
 }
 
 // LVGL timer drives frame redraws while the animation is live; the timer

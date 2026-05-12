@@ -92,18 +92,6 @@
     };
 };
 
-// Newer Seeed XIAO BLE revisions ship with a Puya P25Q16H (JEDEC
-// 85 60 15) where the board's upstream DTS still declares a GigaDevice
-// GD25Q16 (c8 40 15). The mismatch makes the QSPI driver log
-//   <err> qspi_nor: JEDEC id [85 60 15] extener:
-// and skip init, leaving the chip in its post-power-on active state
-// (~mA range) rather than the deep-power-down state has-dpd allows.
-// ZMK doesn't actually use the external flash so this was just a
-// quiet power leak.
-&gd25q16 {
-    jedec-id = [85 60 15];
-};
-
 / {
     split_inputs {
         #address-cells = <1>;

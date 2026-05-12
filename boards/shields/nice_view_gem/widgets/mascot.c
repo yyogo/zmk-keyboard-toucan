@@ -231,6 +231,6 @@ void draw_mascot(lv_obj_t *canvas, const struct status_state *state) {
     if (ms == MASCOT_SLEEP) {
         lv_draw_label_dsc_t label_dsc;
         init_label_dsc(&label_dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
-        lv_canvas_draw_text(canvas, draw_x + 5 + 9 + 4, MASCOT_Y + 1, 8, &label_dsc, "z");
+        canvas_draw_text(canvas, draw_x + 5 + 9 + 4, MASCOT_Y + 1, 8, &label_dsc, "z");
     }
 }

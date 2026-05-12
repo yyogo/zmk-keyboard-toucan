@@ -43,7 +43,7 @@ static inline int mirror_x(int x, int w, int pivot) {
 static void mr_rect(const struct mr_ctx *c, int x, int y, int w, int h,
                     const lv_draw_rect_dsc_t *dsc) {
     int x_out = c->flip ? mirror_x(x, w, c->pivot) : x;
-    lv_canvas_draw_rect(c->canvas, x_out, y, w, h, dsc);
+    canvas_draw_rect(c->canvas, x_out, y, w, h, dsc);
 }
 
 static void draw_spans(const struct mr_ctx *c, int origin_x, int origin_y,

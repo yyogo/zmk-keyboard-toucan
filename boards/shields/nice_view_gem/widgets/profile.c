@@ -11,14 +11,14 @@
 #define SLOT_STRIDE 10
 
 static inline void set_px(lv_obj_t *canvas, int x, int y) {
-    lv_canvas_set_px_color(canvas, x, y, LVGL_FOREGROUND);
+    lv_canvas_set_px(canvas, x, y, LVGL_FOREGROUND, LV_OPA_COVER);
 }
 
 // Active + connected: solid fill.
 static void draw_filled(lv_obj_t *canvas, int x) {
     lv_draw_rect_dsc_t dsc;
     init_rect_dsc(&dsc, LVGL_FOREGROUND);
-    lv_canvas_draw_rect(canvas, x, SLOT_Y0, SLOT_W, SLOT_H, &dsc);
+    canvas_draw_rect(canvas, x, SLOT_Y0, SLOT_W, SLOT_H, &dsc);
 }
 
 // Paired, not active: solid 1px outline.
@@ -28,7 +28,7 @@ static void draw_outline(lv_obj_t *canvas, int x) {
     dsc.bg_color = LVGL_BACKGROUND;
     dsc.border_color = LVGL_FOREGROUND;
     dsc.border_width = 1;
-    lv_canvas_draw_rect(canvas, x, SLOT_Y0, SLOT_W, SLOT_H, &dsc);
+    canvas_draw_rect(canvas, x, SLOT_Y0, SLOT_W, SLOT_H, &dsc);
 }
 
 // Unpaired slot: dashed outline (every other pixel of the perimeter).

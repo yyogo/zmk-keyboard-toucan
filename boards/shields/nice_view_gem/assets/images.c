@@ -33,10 +33,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_GRID uint
     0xaa, 0x95, 0x52, 0xaa, 0x55, 0x4a, 0xa9, 0x55, 0x20,
 };
 
-const lv_img_dsc_t grid = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
-    .header.always_zero = 0,
-    .header.reserved = 0,
+const lv_image_dsc_t grid = {
+    .header.cf = LV_COLOR_FORMAT_I1,
     .header.w = 67,
     .header.h = 33,
     .data_size = 305,
@@ -60,10 +58,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_PROFILES 
     0xff, 0x3f, 0xcf, 0xf3, 0xfc, 0xff, 
 };
 
-const lv_img_dsc_t profiles = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
-    .header.always_zero = 0,
-    .header.reserved = 0,
+const lv_image_dsc_t profiles = {
+    .header.cf = LV_COLOR_FORMAT_I1,
     .header.w = 48,
     .header.h = 8,
     .data_size = 56,
@@ -90,10 +86,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BT uint8_
     0x10,
 };
 
-const lv_img_dsc_t bt = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
-    .header.always_zero = 0,
-    .header.reserved = 0,
+const lv_image_dsc_t bt = {
+    .header.cf = LV_COLOR_FORMAT_I1,
     .header.w = 7,
     .header.h = 11,
     .data_size = 19,
@@ -118,10 +112,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_USB uint8
     0x00, 0x07, 0x00,
 };
 
-const lv_img_dsc_t usb = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
-    .header.always_zero = 0,
-    .header.reserved = 0,
+const lv_image_dsc_t usb = {
+    .header.cf = LV_COLOR_FORMAT_I1,
     .header.w = 22,
     .header.h = 9,
     .data_size = 35,
