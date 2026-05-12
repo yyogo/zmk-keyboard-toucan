@@ -3,3 +3,15 @@ config SHIELD_TOUCAN_LEFT
 
 config SHIELD_TOUCAN_RIGHT
     def_bool $(shields_list_contains,toucan_right)
+
+config TOUCAN_HEARTBEAT
+    bool "Toucan diagnostic heartbeat"
+    depends on PRINTK
+    default n
+    help
+      Spawns a dedicated thread that prints a 1Hz heartbeat with an
+      embedded system-workqueue liveness counter. Used to diagnose
+      right-half freezes: distinguishes a wedged MCU (heartbeat stops)
+      from a stalled system workqueue (heartbeat ticks but the wq
+      counter stops advancing). Pair with the zmk-usb-logging snippet
+      so output reaches USB CDC.

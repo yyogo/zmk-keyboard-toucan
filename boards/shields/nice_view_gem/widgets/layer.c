@@ -9,7 +9,8 @@
 #include <zmk/keymap.h>
 #include <zmk/matrix.h>
 
-
+#define LAYER_STATUS_Y 40
+#define LAYER_INDICATOR_Y 70
 
 static void draw_layer_indicator(lv_obj_t *canvas, const struct status_state *state) {
     const int n_layers = ZMK_KEYMAP_LAYERS_LEN;
@@ -22,7 +23,7 @@ static void draw_layer_indicator(lv_obj_t *canvas, const struct status_state *st
     const int gap = 2;
     const int total_w = n_layers * rect_w + (n_layers - 1) * gap;
     const int x_start = (SCREEN_WIDTH - total_w) / 2;
-    const int y = 100;
+    const int y = LAYER_INDICATOR_Y;
 
     lv_draw_rect_dsc_t filled;
     init_rect_dsc(&filled, LVGL_FOREGROUND);
@@ -57,6 +58,6 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
         layer_name = fallback_layer_name;
     }
 
-    lv_canvas_draw_text(canvas, 0, 70, SCREEN_WIDTH, &label_dsc, layer_name);
+    lv_canvas_draw_text(canvas, 0, LAYER_STATUS_Y, SCREEN_WIDTH, &label_dsc, layer_name);
     draw_layer_indicator(canvas, state);
 }

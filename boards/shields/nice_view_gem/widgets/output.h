@@ -1,6 +1,7 @@
 #pragma once
 
 #include <lvgl.h>
+#include <zmk/ble.h>
 #include <zmk/endpoints.h>
 #include "util.h"
 
@@ -10,6 +11,7 @@ struct output_status_state {
     int active_profile_index;
     bool active_profile_connected;
     bool active_profile_bonded;
+    bool profile_open[ZMK_BLE_PROFILE_COUNT];
 };
 #else
 struct peripheral_status_state {

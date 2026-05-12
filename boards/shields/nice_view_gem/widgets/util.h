@@ -1,6 +1,7 @@
 #pragma once
 
 #include <lvgl.h>
+#include <zmk/ble.h>
 #include <zmk/endpoints.h>
 
 #define SCREEN_WIDTH 144
@@ -23,6 +24,7 @@ struct status_state {
     int active_profile_index;
     bool active_profile_connected;
     bool active_profile_bonded;
+    bool profile_open[ZMK_BLE_PROFILE_COUNT];
     uint8_t layer_index;
     const char *layer_label;
     int wpm;

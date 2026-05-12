@@ -1,78 +1,35 @@
 #include <zephyr/kernel.h>
 #include "output.h"
-#include "../assets/custom_fonts.h"
 
-LV_IMG_DECLARE(bt_no_signal);
-LV_IMG_DECLARE(bt_unbonded);
 LV_IMG_DECLARE(bt);
 LV_IMG_DECLARE(usb);
 
-#if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
-static void draw_usb_connected(lv_obj_t *canvas) {
-    lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, 12, 140, SCREEN_WIDTH-8, &label_dsc, "USB");
-}
-#endif
+// Output strip lives in the bottom-left region of the screen, alongside
+// the profile slots which sit at x=85. BT (7x11) anchors the left of
+// the strip; USB (22x9) anchors the right. Only the active transport's
+// icon is drawn -- icon position alone communicates which mode we're on.
+#define BT_X   70
+#define BT_Y   141
+#define USB_X  12
+#define USB_Y  142
 
-static void draw_ble_disconnected(lv_obj_t *canvas) {
-    lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, 12, 140, SCREEN_WIDTH-8, &label_dsc, "NULL");
-}
-
-static void draw_ble_connected(lv_obj_t *canvas) {
-    lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, 12, 140, SCREEN_WIDTH-8, &label_dsc, "BLE");
+static void draw_icon(lv_obj_t *canvas, int x, int y, const lv_img_dsc_t *img) {
+    lv_draw_img_dsc_t dsc;
+    lv_draw_img_dsc_init(&dsc);
+    lv_canvas_draw_img(canvas, x, y, img, &dsc);
 }
 
 void draw_output_status(lv_obj_t *canvas, const struct status_state *state) {
-    switch (state->selected_endpoint.transport) {
-        case ZMK_TRANSPORT_USB:
-            draw_usb_connected(canvas);
-            break;
-        case ZMK_TRANSPORT_BLE:
-            draw_ble_connected(canvas);
-            break;
-        default:
-            draw_ble_disconnected(canvas);
-            break;
-    }
-
-    /*
-    lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &lcd_phone, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, 0, 1, 25, &label_dsc, "SIG");
-
-    lv_draw_rect_dsc_t rect_white_dsc;
-    init_rect_dsc(&rect_white_dsc, LVGL_FOREGROUND);
-    lv_canvas_draw_rect(canvas, 43, 0, 24, 15, &rect_white_dsc);
-
-#if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
+    // always draw BT icon
+    draw_icon(canvas, BT_X, BT_Y, &bt);
     switch (state->selected_endpoint.transport) {
     case ZMK_TRANSPORT_USB:
-        draw_usb_connected(canvas);
+        draw_icon(canvas, USB_X, USB_Y, &usb);
         break;
-
-    case ZMK_TRANSPORT_BLE:
-        if (state->active_profile_bonded) {
-            if (state->active_profile_connected) {
-                draw_ble_connected(canvas);
-            } else {
-                draw_ble_disconnected(canvas);
-            }
-        } else {
-            draw_ble_unbonded(canvas);
-        }
+    // case ZMK_TRANSPORT_BLE:
+    //     draw_icon(canvas, BT_X, BT_Y, &bt);
+    //     break;
+    default:
         break;
     }
-#else
-    if (state->connected) {
-        draw_ble_connected(canvas);
-    } else {
-        draw_ble_disconnected(canvas);
-    }
-#endif
-*/
 }

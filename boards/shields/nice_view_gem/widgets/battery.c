@@ -14,6 +14,11 @@
 #define BATT_RIGHT_X        80
 #define BATT_RIGHT_LABEL_X  (BATT_RIGHT_X + BATT_BODY_W + BATT_NUB_W + 3)
 
+// ZMK's lithium_ion_mv_to_pct is a linear 3450..4200 mV mapping, so a
+// fully-charged Li-Po (terminates at ~4.1..4.18 V at rest) reports 90%.
+// Treat anything >= 90 as full so the display doesn't lie about it.
+#define BATT_FULL_LEVEL 90
+
 static void draw_label(lv_obj_t *canvas, int x, const char *label) {
     lv_draw_label_dsc_t dsc;
     init_label_dsc(&dsc, LVGL_FOREGROUND, &quinquefive_8, LV_TEXT_ALIGN_LEFT);
@@ -37,11 +42,12 @@ static void draw_outline(lv_obj_t *canvas, int x) {
 
 static void draw_fill(lv_obj_t *canvas, int x, uint8_t level) {
     if (level <= 1) return;
+    if (level >= BATT_FULL_LEVEL) level = BATT_FULL_LEVEL;
     lv_draw_rect_dsc_t fill;
     init_rect_dsc(&fill, LVGL_FOREGROUND);
     int inner_w = BATT_BODY_W - 4;
     int inner_h = BATT_BODY_H - 4;
-    int fill_w = (inner_w * level + 50) / 100;
+    int fill_w = (inner_w * level + BATT_FULL_LEVEL / 2) / BATT_FULL_LEVEL;
     if (fill_w > 0) {
         lv_canvas_draw_rect(canvas, x + 2, BATT_Y + 2, fill_w, inner_h, &fill);
     }
