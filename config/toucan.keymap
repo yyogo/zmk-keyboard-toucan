@@ -21,6 +21,13 @@
     };
 
     behaviors {
+        toucan_caps_word: toucan_caps_word {
+            compatible = "toucan,behavior-caps-word";
+            #binding-cells = <0>;
+            continue-list = <UNDERSCORE BACKSPACE DELETE>;
+            display-name = "Caps Word";
+        };
+
         // 1 tap = LSHFT, 2 taps = caps_word, 3 taps = CAPS lock.
         // Tap-dance commits immediately when a non-tap-dance key is
         // pressed, so shift+letter typing isn't delayed -- the only
@@ -30,7 +37,7 @@
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&kp LSHFT>, <&caps_word>, <&kp CAPS>;
+            bindings = <&kp LSHFT>, <&toucan_caps_word>, <&kp CAPS>;
         };
     };
 

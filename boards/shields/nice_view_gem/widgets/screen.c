@@ -22,6 +22,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/usb.h>
 #include <zmk/split/central.h>
 
+#include <toucan/events/caps_word_state_changed.h>
+
 #include "battery.h"
 #include "boot_logo.h"
 #include "caps.h"
@@ -200,6 +202,37 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_caps_status, struct caps_status_state, caps_s
 ZMK_SUBSCRIPTION(widget_caps_status, zmk_hid_indicators_changed);
 
 /**
+ * Caps Word indicator
+ **/
+
+struct caps_word_status_state {
+    bool active;
+};
+
+static void set_caps_word_status(struct zmk_widget_screen *widget,
+                                 struct caps_word_status_state state) {
+    widget->state.caps_word = state.active;
+    draw_top(widget->obj, widget->cbuf, &widget->state);
+}
+
+static void caps_word_status_update_cb(struct caps_word_status_state state) {
+    struct zmk_widget_screen *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_caps_word_status(widget, state); }
+}
+
+static struct caps_word_status_state caps_word_status_get_state(const zmk_event_t *eh) {
+    const struct toucan_caps_word_state_changed *ev = as_toucan_caps_word_state_changed(eh);
+    return (struct caps_word_status_state){
+        .active = (ev != NULL) ? ev->active : false,
+    };
+}
+
+ZMK_DISPLAY_WIDGET_LISTENER(widget_caps_word_status, struct caps_word_status_state,
+                            caps_word_status_update_cb, caps_word_status_get_state)
+
+ZMK_SUBSCRIPTION(widget_caps_word_status, toucan_caps_word_state_changed);
+
+/**
  * Output status
  **/
 
@@ -310,6 +343,7 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget_layer_status_init();
     widget_output_status_init();
     widget_caps_status_init();
+    widget_caps_word_status_init();
     mascot_widget_init();
     start_boot_logo();
 
@@ -317,4 +351,3 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
 }
 
 lv_obj_t *zmk_widget_screen_obj(struct zmk_widget_screen *widget) { return widget->obj; }
-

@@ -36,6 +36,7 @@ struct status_state {
     uint8_t layer_index;
     const char *layer_label;
     bool caps_lock;
+    bool caps_word;
 #else
     bool connected;
 #endif

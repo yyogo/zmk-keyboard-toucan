@@ -1,0 +1,13 @@
+# Copyright (c) 2026 The Toucan Contributors
+# SPDX-License-Identifier: MIT
+
+description: Toucan Caps Word behavior with state-change events
+
+compatible: "toucan,behavior-caps-word"
+
+include: zero_param.yaml
+
+properties:
+  continue-list:
+    type: array
+    required: true
