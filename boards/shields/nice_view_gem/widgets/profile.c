@@ -4,8 +4,8 @@
 
 // 5 slots, 8x8 each, 2px gap (matches the pre-existing layout so other
 // widgets stay aligned).
-#define SLOT_X0     85
-#define SLOT_Y0     143
+#define SLOT_X0     70
+#define SLOT_Y0     35
 #define SLOT_W      8
 #define SLOT_H      8
 #define SLOT_STRIDE 10
@@ -19,6 +19,13 @@ static void draw_filled(lv_obj_t *canvas, int x) {
     lv_draw_rect_dsc_t dsc;
     init_rect_dsc(&dsc, LVGL_FOREGROUND);
     canvas_draw_rect(canvas, x, SLOT_Y0, SLOT_W, SLOT_H, &dsc);
+}
+
+// Pairing mode: smaller solid fill
+static void draw_small_filled(lv_obj_t *canvas, int x) {
+    lv_draw_rect_dsc_t dsc;
+    init_rect_dsc(&dsc, LVGL_FOREGROUND);
+    canvas_draw_rect(canvas, x+2, SLOT_Y0+2, SLOT_W-4, SLOT_H-4, &dsc);
 }
 
 // Paired, not active: solid 1px outline.
@@ -70,6 +77,8 @@ void draw_profile_status(lv_obj_t *canvas, const struct status_state *state) {
         if (is_active) {
             if (state->active_profile_connected) {
                 draw_filled(canvas, x);
+            } else if (is_open) {
+                draw_small_filled(canvas, x);
             } else {
                 draw_dithered(canvas, x);
             }

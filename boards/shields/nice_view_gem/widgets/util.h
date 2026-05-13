@@ -35,7 +35,6 @@ struct status_state {
     bool profile_open[ZMK_BLE_PROFILE_COUNT];
     uint8_t layer_index;
     const char *layer_label;
-    int wpm;
     bool caps_lock;
 #else
     bool connected;

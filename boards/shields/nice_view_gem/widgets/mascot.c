@@ -18,7 +18,7 @@ extern void zmk_widget_screen_force_redraw(void);
 // ----- Layout (origin at MASCOT_X, MASCOT_Y; sprite ~32x24) ------------
 
 #define MASCOT_X 56
-#define MASCOT_Y 110
+#define MASCOT_Y 80
 
 // ----- Mood model ------------------------------------------------------
 

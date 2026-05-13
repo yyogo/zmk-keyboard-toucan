@@ -8,10 +8,10 @@ LV_IMG_DECLARE(usb);
 // the profile slots which sit at x=85. BT (7x11) anchors the left of
 // the strip; USB (22x9) anchors the right. Only the active transport's
 // icon is drawn -- icon position alone communicates which mode we're on.
-#define BT_X   70
-#define BT_Y   141
+#define BT_X  125
+#define BT_Y   33
 #define USB_X  12
-#define USB_Y  142
+#define USB_Y  32
 
 static void draw_icon(lv_obj_t *canvas, int x, int y, const lv_image_dsc_t *img) {
     lv_draw_image_dsc_t dsc;

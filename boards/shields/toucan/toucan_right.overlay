@@ -75,6 +75,9 @@
         abs-rel-divisor = <4>;
         // Bypass the chip's ~200 ms tap-confirmation timer.
         tap-fast;
+        // Z-trajectory + velocity filter; see input_pinnacle.c
+        // LIFT_FILTER_* constants and tools/sim_lift_filter.py.
+        lift-filter;
 
         // Optional: turning this on enables very aggressive power saving, after 5 seconds with no touches
         // the trackpad will go to sleep.  It wakes up on touch, but there is a ~300ms delay.  Most users will find
