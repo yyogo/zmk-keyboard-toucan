@@ -281,6 +281,8 @@ ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
  * Activity state handling for sleep screen
  **/
 
+#define SLEEP_SCREEN_FLUSH_TIMEOUT_MS 250
+
 static void force_redraw_all_widgets(void) {
     struct zmk_widget_screen *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
@@ -292,34 +294,76 @@ void zmk_widget_screen_force_redraw(void) {
     force_redraw_all_widgets();
 }
 
+static void active_screen_work_cb(struct k_work *work) {
+    ARG_UNUSED(work);
+
+    bool was_sleeping = is_sleep_screen_active();
+    set_sleep_screen_active(false);
+    if (was_sleeping) {
+        start_boot_logo();
+        force_redraw_all_widgets();
+    }
+}
+
+K_WORK_DEFINE(active_screen_work, active_screen_work_cb);
+
+K_SEM_DEFINE(sleep_screen_flushed, 0, 1);
+
+static void sleep_screen_work_cb(struct k_work *work) {
+    ARG_UNUSED(work);
+
+    set_sleep_screen_active(true);
+    force_redraw_all_widgets();
+
+    // The sleep transition immediately powers off after listeners return.
+    // Flush from the display queue so the Sharp panel receives the sleep frame
+    // before sys_poweroff().
+    lv_task_handler();
+    lv_refr_now(NULL);
+    k_sem_give(&sleep_screen_flushed);
+}
+
+K_WORK_DEFINE(sleep_screen_work, sleep_screen_work_cb);
+
+static void drain_sleep_screen_flush_sem(void) {
+    while (k_sem_take(&sleep_screen_flushed, K_NO_WAIT) == 0) {
+    }
+}
+
 static int display_activity_event_handler(const zmk_event_t *eh) {
     struct zmk_activity_state_changed *ev = as_zmk_activity_state_changed(eh);
     if (ev == NULL) {
         return -ENOTSUP;
     }
 
+    if (!zmk_display_is_initialized()) {
+        return ZMK_EV_EVENT_BUBBLE;
+    }
+
     switch (ev->state) {
-    case ZMK_ACTIVITY_ACTIVE: {
-        bool was_sleeping = is_sleep_screen_active();
-        set_sleep_screen_active(false);
-        if (was_sleeping) {
-            start_boot_logo();
-            force_redraw_all_widgets();
+    case ZMK_ACTIVITY_ACTIVE:
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY_WORK_QUEUE_DEDICATED)
+        k_work_submit_to_queue(zmk_display_work_q(), &active_screen_work);
+#else
+        active_screen_work_cb(NULL);
+#endif
+        break;
+    case ZMK_ACTIVITY_SLEEP: {
+        drain_sleep_screen_flush_sem();
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY_WORK_QUEUE_DEDICATED)
+        int submitted = k_work_submit_to_queue(zmk_display_work_q(), &sleep_screen_work);
+        if (submitted >= 0) {
+            (void)k_sem_take(&sleep_screen_flushed, K_MSEC(SLEEP_SCREEN_FLUSH_TIMEOUT_MS));
         }
+#else
+        sleep_screen_work_cb(NULL);
+#endif
         break;
     }
-    case ZMK_ACTIVITY_SLEEP:
-        set_sleep_screen_active(true);
-        force_redraw_all_widgets();
-        // Force LVGL to process pending updates and flush to display hardware
-        // before the CPU enters deep sleep
-        lv_task_handler();
-        lv_refr_now(NULL);
-        break;
     default:
         break; // ignore other states (like IDLE)
     }
-    return 0;
+    return ZMK_EV_EVENT_BUBBLE;
 }
 
 ZMK_LISTENER(nice_view_gem_display, display_activity_event_handler);
